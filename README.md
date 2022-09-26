@@ -1,5 +1,5 @@
-Library: ngx-guided-tour
-Version: 2.0.1
+Library: ngx-guided-tour |
+Version: 2.0.1 |
 License: MIT
 
 Demo: https://lsqlabs.github.io/ngx-guided-tour/
