@@ -1,0 +1,166 @@
+@mixin step-styling(
+    $tour-zindex: 1081,
+    $tour-text-color: #231f1f,
+    $tour-next-button-color: #f26230,
+    $tour-next-button-hover: #c84b31,
+    $tour-back-button-color: #007bff,
+    $tour-next-text-color: #ffffff,
+    $tour-next-text-hover: #ffffff,
+    $tour-skip-link-color: #2b2a2a,
+    $tour-orb-color: #625aff,
+    $tour-shadow-color: #4c4c4c,
+    $tour-step-color: white
+) {
+    .guided-tour-user-input-mask {
+        z-index: $tour-zindex;
+    }
+
+    .guided-tour-spotlight-overlay {
+        z-index: $tour-zindex + 1;
+        border: 2px solid $tour-back-button-color;
+    }
+
+    .tour-orb {
+        z-index: $tour-zindex - 2;
+        background-color: $tour-orb-color;
+        box-shadow: 0 0 0.3rem 0.1rem $tour-orb-color;
+
+        .tour-orb-ring {
+            &::after {
+                border: 1rem solid $tour-orb-color;
+                box-shadow: 0 0 0.1rem 0.1rem $tour-orb-color;
+            }
+        }
+    }
+
+    .tour-progress-indicator {
+        color: $tour-skip-link-color;
+    }
+
+    .exit-button {
+        color: $tour-skip-link-color;
+    }
+
+    .tour-step {
+        z-index: $tour-zindex + 2;
+
+        &.tour-bottom,
+        &.tour-bottom-right,
+        &.tour-bottom-left {
+            .tour-arrow::before {
+                @include tour-triangle(top, $tour-back-button-color);
+            }
+        }
+
+        &.tour-top,
+        &.tour-top-right,
+        &.tour-top-left {
+            .tour-arrow::before {
+                @include tour-triangle(bottom, $tour-back-button-color);
+            }
+        }
+
+        &.tour-left {
+            .tour-arrow::before {
+                @include tour-triangle(right, $tour-back-button-color);
+            }
+        }
+
+        &.tour-right {
+            .tour-arrow::before {
+                @include tour-triangle(left, $tour-back-button-color);
+            }
+        }
+
+        .tour-block {
+            color: $tour-text-color;
+            background-color: $tour-step-color;
+            box-shadow: 0 0.4rem 0.6rem $tour-shadow-color;
+            border: 2px solid $tour-back-button-color;
+        }
+
+        .tour-buttons {
+            button.skip-button {
+                color: $tour-skip-link-color;
+            }
+
+            .back-button {
+                color: $tour-back-button-color;
+            }
+
+            .next-button {
+                background-color: $tour-next-button-color;
+                color: $tour-next-text-color;
+
+                &:hover {
+                    background-color: $tour-next-button-hover;
+                    color: $tour-next-text-hover;
+                }
+            }
+        }
+    }
+}
+
+@mixin tour-triangle($direction, $color: currentColor, $size: 1rem) {
+    @if not index(top right bottom left, $direction) {
+        @error 'Direction must be either `top`, `right`, `bottom` or `left`.';
+    }
+
+    $opposite-direction: top;
+
+    @if $direction==top {
+        $opposite-direction: bottom;
+    }
+
+    @if $direction==bottom {
+        $opposite-direction: top;
+    }
+
+    @if $direction==right {
+        $opposite-direction: left;
+    }
+
+    @if $direction==left {
+        $opposite-direction: right;
+    }
+
+    width: 0;
+    height: 0;
+    content: '';
+    z-index: -1;
+    display: none;
+    border-#{$opposite-direction}: $size solid $color;
+    $perpendicular-borders: $size solid transparent;
+
+
+    @if $direction==top or $direction==bottom {
+        border-left: $perpendicular-borders;
+        border-right: $perpendicular-borders;
+    } @else if $direction==right or $direction==left {
+        border-bottom: $perpendicular-borders;
+        border-top: $perpendicular-borders;
+    }
+}
+
+.light-mode {
+    @include step-styling;
+}
+
+.dark-mode {
+    // .exit-button {
+    //     color: #ffffff;
+    // }
+    @include step-styling(
+        $tour-zindex: 1081,
+        $tour-text-color: #ecdbba,
+        $tour-next-button-color: #f26230,
+        $tour-next-button-hover: #c84b31,
+        $tour-back-button-color: #007bff,
+        $tour-next-text-color: #ffffff,
+        $tour-next-text-hover: #ffffff,
+        $tour-skip-link-color: #ffffff,
+        $tour-orb-color: #625aff,
+        $tour-shadow-color: #2b2b2b,
+        $tour-step-color: #191919
+    );
+}
